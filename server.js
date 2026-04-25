@@ -288,6 +288,27 @@ app.post("/transactions", (req, res) => {
     res.json({ message: "Payment recorded" });
   });
 });
+app.get("/booking/:id", (req, res) => {
+  const id = req.params.id;
+
+  const sql = `
+      SELECT 
+          booking_id,
+          slot,
+          date,
+          duration,
+          amount,
+          vehicle_no,
+          payment_method
+      FROM bookings
+      WHERE booking_id = ?
+  `;
+
+  db.query(sql, [id], (err, result) => {
+      if (err) return res.status(500).json(err);
+      res.json(result[0]);
+  });
+});
 
 // ================= SERVER =================
 app.listen(3000, () => {
